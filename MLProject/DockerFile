@@ -1,0 +1,16 @@
+# 1. Gunakan Base Image Python yang ringan
+FROM python:3.13.2-slim
+
+# 2. Tentukan folder kerja di dalam container
+WORKDIR /app
+
+# 3. Salin file requirements atau conda (kita pakai pip manual agar simpel di docker)
+#    Kita install library yang dibutuhkan
+RUN pip install --no-cache-dir pandas numpy scikit-learn mlflow matplotlib setuptools
+
+# 4. Salin seluruh isi folder MLProject ke dalam container
+COPY . /app
+
+# 5. Perintah yang dijalankan saat container menyala
+#    Langsung jalankan script training
+CMD ["python", "modelling.py"]
