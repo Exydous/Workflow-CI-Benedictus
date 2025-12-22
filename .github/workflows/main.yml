@@ -29,4 +29,4 @@ jobs:
         context: ./MLProject
         push: true
         # GANTI BAGIAN INI: username/repo:tag
-        tags: benedictusaryantio/ml-project-submission:latest
+        tags: benedictusaryantio/ml-project-submission
