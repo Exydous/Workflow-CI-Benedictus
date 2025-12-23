@@ -1,4 +1,4 @@
-name: CI Pipeline (Model Training)
+name: CI Pipeline (Debug Mode)
 
 on: [push]
 
@@ -11,23 +11,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Siapkan Python
+    # 2. 👉 LANGKAH BARU: CEK STRUKTUR FOLDER
+    - name: List files in repository
+      run: |
+        echo "Isi folder root:"
+        ls -al
+        echo "----------------------"
+        echo "Cari semua folder dan file:"
+        find . -maxdepth 2 -not -path '*/.*'
+
+    # 3. Siapkan Python
     - name: Set up Python 3.9
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
-    # 3. Install Dependencies (PERBAIKAN DISINI)
+    # 4. Install (Kita coba install dari root dulu kalau requirements ada di luar)
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Masuk ke folder dulu baru install
-        cd Membangun_model  
-        pip install -r requirements.txt
-
-    # 4. Run Training (PERBAIKAN DISINI)
-    - name: Run Model Re-training
-      run: |
-        # Masuk ke folder dulu baru jalankan script
-        cd Membangun_model
-        python modelling_tuning.py
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        # Script ini akan mencoba install jika requirements.txt ada di root
