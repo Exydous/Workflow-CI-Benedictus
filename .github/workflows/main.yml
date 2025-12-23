@@ -1,4 +1,4 @@
-name: CI Pipeline (MLflow Project)
+name: CI Pipeline (Model Training)
 
 on: [push]
 
@@ -7,26 +7,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Ambil kode
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # 2. Siapkan Python
     - name: Set up Python 3.9
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
+    # 3. Install Dependencies (PERBAIKAN DISINI)
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Wajib install mlflow agar perintah 'mlflow run' bisa jalan
-        pip install pandas scikit-learn mlflow matplotlib joblib numpy
+        # Masuk ke folder dulu baru install
+        cd Membangun_model  
+        pip install -r requirements.txt
 
-    # 👉 INI BAGIAN YANG DIREVISI (Gunakan mlflow run) 👈
-    - name: Run MLflow Project
+    # 4. Run Training (PERBAIKAN DISINI)
+    - name: Run Model Re-training
       run: |
-        # Masuk ke folder project
-        cd MLProject
-        
-        # Jalankan menggunakan MLflow Run
-        # --env-manager=local artinya pakai python yang sedang aktif (yang sudah diinstall pip di atas)
-        mlflow run . --env-manager=local
+        # Masuk ke folder dulu baru jalankan script
+        cd Membangun_model
+        python modelling_tuning.py
