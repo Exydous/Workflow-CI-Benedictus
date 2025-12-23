@@ -10,7 +10,7 @@ from sklearn.metrics import mean_absolute_error
 # Karena data ada di dalam folder yang sama dengan script ini
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Data ada di folder 'namadataset_preprocessing' di sebelah script
-DATA_PATH = os.path.join(BASE_DIR, 'namadataset_preprocessing', 'processed_data.csv')
+DATA_PATH = os.path.join(BASE_DIR, 'world-data-2023_preprocessing', 'processed_data.csv')
 
 if not os.path.exists(DATA_PATH):
     raise FileNotFoundError(f"Data tidak ditemukan di {DATA_PATH}")
