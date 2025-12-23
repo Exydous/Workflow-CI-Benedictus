@@ -1,32 +1,39 @@
-name: CI/CD Pipeline to Docker Hub
+name: CI Pipeline (Model Training)
 
-# Workflow jalan saat ada push ke branch 'main'
-on:
-  push:
-    branches: [ "main" ]
+on: [push]
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Ambil kode dari repository GitHub
-    - name: Checkout Code
+    # 1. Ambil kode dari repository
+    - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Login ke Docker Hub (Menggunakan Kunci Rahasia)
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
+    # 2. Siapkan Python
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        python-version: '3.9'
 
-    # 3. Build Image & Push ke Docker Hub
-    - name: Build and Push Docker Image
-      uses: docker/build-push-action@v4
-      with:
-        # PENTING: Lokasi Dockerfile ada di dalam folder MLProject
-        context: ./MLProject
-        push: true
-        # GANTI BAGIAN INI: username/repo:tag
-        tags: benedictusaryantio/ml-project-submission:latest
+    # 3. Install library yang dibutuhkan
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        # Pastikan library MLflow, scikit-learn, pandas ada di requirements.txt
+
+    # 4. (Opsional) Linting & Testing - Nilai Plus
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+    # 5. 👉 INI YANG DIMINTA REVIEWER (RE-TRAINING) 👈
+    - name: Run Model Re-training
+      run: |
+        python modelling_tuning.py
+      # Ganti 'modelling_tuning.py' dengan nama file training utama Anda
+      # Pastikan script ini menyimpan model/menghasilkan output tanpa error
