@@ -1,0 +1,5 @@
+name: Country_Life_Expectancy_Project
+
+entry_points:
+  main:
+    command: "python modelling.py"
